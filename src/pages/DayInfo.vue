@@ -3,14 +3,15 @@
     div.draggable-anchor-container
       span.anchor(draggable) *
     div
-      div.task(v-for="task in chosenDayTasks" :key="task.id")
-        slot(:task="task" name="taskItem")
+      transition-group(name="tasklist" tag="p")
+        div.task(v-for="task in chosenDayTasks" :key="task.id")
+          slot(:task="task" name="taskItem")
     div
       div.editor.container
         div.editor-field(v-show="isEditorActive")
-          input(v-model="newTask.time")
+          input(v-model="newTask.time" @keyup.enter="addTask")
         div.editor-field(v-show="isEditorActive")
-          input(v-model="newTask.description")
+          input(v-model="newTask.description" @keyup.enter="addTask")
         div.editor-field
           button(@click="addTask") +
 </template>
@@ -58,7 +59,6 @@ export default {
 .task {
   box-sizing: border-box;
   padding: 5px;
-  background-color: yellow;
 }
 .container {
   display: flex;
@@ -85,6 +85,14 @@ input {
 }
 .anchor:hover {
   cursor: pointer;
+}
+
+.tasklist-enter-active {
+  transition: all .4s;
+}
+.tasklist-enter {
+  opacity: 0;
+  transform: translateY(30px);
 }
 </style>
 

@@ -24,6 +24,11 @@ export default {
           id: '3',
           time: '6:30',
           description: 'Отжаться'
+        },
+        {
+          id: '4',
+          time: '7:30',
+          description: 'Наступить на кота'
         }
       ]
     },
