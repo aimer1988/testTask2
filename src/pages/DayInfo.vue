@@ -1,7 +1,9 @@
 <template lang="pug">
   div.day-info
+    div.draggable-anchor-container
+      span.anchor(draggable) *
     div
-      div.task(v-for="task in chosenDayTasks")
+      div.task(v-for="task in chosenDayTasks" :key="task.id")
         slot(:task="task" name="taskItem")
     div
       div.editor.container
@@ -33,10 +35,15 @@ export default {
   },
   methods: {
     addTask () {
-      if (this.isEditorActive)
+      if (this.isEditorActive) {
         this.$store.dispatch('addTask', this.newTask);
-      else
+        this.isEditorActive = false;
+      }        
+      else {
         this.isEditorActive = true;
+        this.newTask.time = '';
+        this.newTask.description = '';
+      }        
     }
   }
 }
@@ -69,6 +76,15 @@ input {
   width: 100%;
   padding: 0;
   box-sizing: border-box;
+}
+.draggable-anchor-container {
+  text-align: right;
+}
+.anchor {
+  font-size: 30px;
+}
+.anchor:hover {
+  cursor: pointer;
 }
 </style>
 

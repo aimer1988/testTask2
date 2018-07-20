@@ -1,19 +1,45 @@
 <template lang="pug">
   div.container
-    div.item {{task.time}}
-    div.item {{task.description}}
+    div.item.item__time(contenteditable @blur="editDone" :class="{ 'item--expired': isExpired }") {{task.time}}
+    div.item.item__description(contenteditable @blur="editDone" :class="{ 'item--expired': isExpired }") {{task.description}}
     div.item.action
       button(@click="deleteItem") X
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
+  data () {
+    return {
+      currentTask: {
+        time: this.task.time,
+        description: this.task.description
+      }
+    }
+  },
   props: {
     task: Object
+  },
+  computed: {
+    ...mapGetters([
+      'chosenDayId'
+    ]),
+    isExpired () {
+      return (this.chosenDayId < new Date().getDay() && this.chosenDayId != 0) || 
+      (this.chosenDayId == new Date().getDay() && Number(this.task.time.replace(/[^-0-9]/gim,'')) < Number(new Date().getHours().toString() + new Date().getMinutes().toString() ))
+    }
   },
   methods: {
     deleteItem () {
       this.$store.dispatch('deleteTask', this.task.id);
+    },
+    editDone (event) {
+      if (Array.from(event.target.classList).findIndex( (x) => x === 'item__time' ) >= 0)
+        this.currentTask.time = event.target.textContent;
+      if (Array.from(event.target.classList).findIndex( (x) => x === 'item__description' ) >= 0)
+        this.currentTask.description = event.target.textContent;
+      this.$store.dispatch('editTask', { editedTaskId: this.task.id, newContent: this.currentTask });
     }
   }
 }
@@ -22,7 +48,9 @@ export default {
 <style lang="scss" scoped>
 .item {
   flex-basis: 30%;
-  //border: 1px solid blue;
+}
+.item--expired {
+  color: red;
 }
 .action {
   text-align: center;
