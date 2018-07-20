@@ -10,7 +10,7 @@ const mutations = {
   },
   [mutation_types.ADD_TASK] (state, newTask) {
     let day = state.days.find((d) => d.id == state.chosenDayId);
-    const newId = Math.max(...day.tasks.map( (t) => Number(t.id) )) + 1;
+    const newId = Math.max(...day.tasks.map( (t) => Number(t.id) ), 0) + 1;
     state.days.find((d) => d.id == state.chosenDayId).tasks.push({
       id: newId,
       time: newTask.time,
