@@ -7,27 +7,27 @@ export default {
       tasks: [
         {
           id: '0',
-          time: '5:00',
+          time: '05:00',
           description: 'Проснуться'
         },
         {
           id: '1',
-          time: '5:30',
+          time: '05:30',
           description: 'Умыться'
         },
         {
           id: '2',
-          time: '6:00',
+          time: '06:00',
           description: 'Побриться'
         },
         {
           id: '3',
-          time: '6:30',
+          time: '06:30',
           description: 'Отжаться'
         },
         {
           id: '4',
-          time: '7:30',
+          time: '07:30',
           description: 'Наступить на кота'
         }
       ]

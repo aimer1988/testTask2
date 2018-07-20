@@ -8,6 +8,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import utils from '../../utils';
 
 export default {
   data () {
@@ -35,11 +36,19 @@ export default {
       this.$store.dispatch('deleteTask', this.task.id);
     },
     editDone (event) {
-      if (Array.from(event.target.classList).findIndex( (x) => x === 'item__time' ) >= 0)
-        this.currentTask.time = event.target.textContent;
-      if (Array.from(event.target.classList).findIndex( (x) => x === 'item__description' ) >= 0)
+      if (Array.from(event.target.classList).findIndex( (x) => x === 'item__time' ) >= 0) {
+        if (this.checkEditorData(event.target.textContent))
+          this.currentTask.time = event.target.textContent;
+        else
+          alert('Некорректные данные');
+      }        
+      if (Array.from(event.target.classList).findIndex( (x) => x === 'item__description' ) >= 0) {
         this.currentTask.description = event.target.textContent;
+      }        
       this.$store.dispatch('editTask', { editedTaskId: this.task.id, newContent: this.currentTask });
+    },
+    checkEditorData (editorData) {
+      return utils.validTime(editorData);
     }
   }
 }

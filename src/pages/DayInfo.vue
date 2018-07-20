@@ -18,6 +18,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import utils from '../utils';
 
 export default {
   data () {
@@ -37,14 +38,21 @@ export default {
   methods: {
     addTask () {
       if (this.isEditorActive) {
-        this.$store.dispatch('addTask', this.newTask);
-        this.isEditorActive = false;
+        if (this.checkEditorData(this.newTask)) {
+          this.$store.dispatch('addTask', this.newTask);
+          this.isEditorActive = false;
+        } else {
+          alert('Некорректные данные');
+        }
       }        
       else {
         this.isEditorActive = true;
         this.newTask.time = '';
         this.newTask.description = '';
       }        
+    },
+    checkEditorData (editorData) {
+      return utils.validTime(editorData.time);
     }
   }
 }
